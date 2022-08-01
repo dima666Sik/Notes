@@ -1,5 +1,4 @@
 # Notes
-___
 
 ## Preview from dima-coder =)!
 1. This project uses jdk 11, JDBC driver, MySQL, Swing;
