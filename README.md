@@ -20,7 +20,7 @@ in which each user can store his own notes for himself;
 If you have downloaded a project and want to run it with your own database then you have to create enum which will be stored in a package src/guru/work/prog/dataenv and put your environment variables.
 ```java
 public enum Environment {
-    DB_URL("jdbc:nameDriver//host:port/nameDB"),
+    DB_URL("jdbc:RDBMS//host:port/nameDB"),
     USERNAME("username"),
     PASSWORD("password");
 

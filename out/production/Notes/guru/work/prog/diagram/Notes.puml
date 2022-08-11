@@ -1,0 +1,159 @@
+@startuml
+!define DARKBLUE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+enum Environment {
+    DB_URL,
+    USERNAME,
+    PASSWORD;
+    -String environmentValue;
+    -Environment(String environmentValue)
+    +String getEnvironmentValue()
+}
+
+class DBConnector {
+    - {static} Connection connection;
+    + {static} Connection getConnector()
+}
+
+interface Checker {
+    ..default method`s..
+    +ResultSet check(String query)
+    +boolean checkNext(String query)
+}
+
+interface Encryption {
+    ..default method`s..
+    +StringBuilder encryptionSHA256(char[] password)
+    -byte[] toBytes(char[] chars)
+}
+
+interface Randomize {
+    ..default method..
+    +int generateRandomize(int min, int max)
+}
+
+class Main {
+    ..start program..
+    + {static} void main(String[] args)
+}
+
+class User {
+    - String name;
+    - String login;
+    - StringBuilder password;
+    - long id_note;
+
+    + User(String name, String login, StringBuilder password, long id_note)
+    + String getName()
+    + String getLogin()
+    + StringBuilder getPassword()
+    + void clearPassword()
+    + long getId_note()
+    + String toString()
+}
+
+class QueryNoteId {
+    + {static} void addNoteId(Connection connection, long id_note)
+}
+
+class QueryNotes {
+    + {static} String getContNotes(long id_note)
+    + {static} String getNotes(long id_note)
+    + {static} void addNote(Connection connection, String title, String text, long id_note)
+    + {static} String updateNote(String title, String text, long id_notes)
+    + {static} String deleteNote(long id_notes)
+}
+
+class QueryUser {
+    +{static} String checkIdNote(int rndId)
+    +{static} String getIdNote(String login, StringBuilder password)
+    +{static} void addUser(Connection connection, String name, String login, StringBuilder password, long id_note)
+    +{static} String searchUser(String login, StringBuilder password)
+}
+
+class LoginForm {
+    - JTextField loginField;
+    - JPasswordField passwordField;
+    - JButton okButton;
+    - JButton cancelButton;
+    - JPanel loginPanel;
+    - JButton registrationButton;
+    + LoginForm(JFrame jFrameParent)
+    - void authorizationUser()
+    - void searchUserInDB(String login, StringBuilder password)
+}
+
+class MainMenuForm{
+    - JButton registrationButton;
+    - JButton signInButton;
+    - JButton exitButton;
+    - JPanel menuPanel;
+    + MainMenuForm(JFrame jFrameParent)
+}
+
+class NoteForm{
+    - JTextPane textPaneTitle;
+    - JTextPane textText;
+    - JPanel createNotePanel;
+    - JButton finishButton;
+    - JButton cancelButton;
+    + NoteForm(JFrame jFrameParent, String login, StringBuilder password)
+    + NoteForm(JFrame jFrameParent, String title, String text, String login, StringBuilder password,long id_notes)
+    - void createNote(int id_note)
+    - void readAndPushText(long id_notes)
+}
+
+class NotesMenu{
+    - {static} int COUNT_COLUMN;
+    - JPanel notesMenuPanel;
+    - JTable table;
+    - JLabel buttonAddNote;
+    - JButton exitButton;
+    - JButton chooseButton;
+    - JLabel buttonRemoveNote;
+    + NotesMenu(JFrame jFrameParent, long id_note, String login, StringBuilder password)
+    - void createTable(long id_note, String login, StringBuilder password)
+}
+
+class RegisterForm{
+    - JTextField nameField;
+    - JPasswordField passwordField;
+    - JTextField loginField;
+    - JPasswordField confirmPasswordField;
+    - JButton cancelBtn;
+    - JButton registrationBtn;
+    - JPanel registrationPanel;
+    - JButton signInButton;
+    - User user;
+    + RegisterForm(JFrame jFrameParent)
+    - int generatorId(int min, int max)
+    - void registerUser()
+    - void addUserInDB(String name, String login, StringBuilder password, long id_note)
+}
+LoginForm <|-- JDialog
+MainMenuForm <|-- JDialog
+NoteForm <|-- JDialog
+NotesMenu <|-- JDialog
+RegisterForm <|-- JDialog
+
+LoginForm <|.. Checker
+NoteForm <|.. Checker
+NotesMenu <|.. Checker
+RegisterForm <|.. Checker
+
+RegisterForm <|.. Encryption
+LoginForm <|.. Encryption
+RegisterForm <|.. Randomize
+RegisterForm o-- User
+DBConnector <.. Environment
+RegisterForm <.. LoginForm
+NotesMenu <.. LoginForm
+RegisterForm <.. MainMenuForm
+LoginForm <.. MainMenuForm
+NoteForm <.. NotesMenu
+MainMenuForm <.. NotesMenu
+LoginForm <.. RegisterForm
+MainMenuForm <.. RegisterForm
+MainMenuForm <.. Main
+Checker <.. DBConnector
+@enduml

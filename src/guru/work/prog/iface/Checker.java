@@ -17,4 +17,5 @@ public interface Checker {
     default boolean checkNext(String query) throws SQLException {
         return check(query).next();
     }
+
 }
